@@ -14,12 +14,12 @@ from bed import (
 def read_bed_file(f: TextIO) -> list[BedLine]:
     """Read an entire sorted bed file."""
     # Handle first line...
-    line = file.readline()
+    line = f.readline()
     if not line:
         return []
 
     res = [parse_line(line)]
-    for line in file:
+    for line in f:
         feature = parse_line(line)
         prev_feature = res[-1]
         assert prev_feature.chrom < feature.chrom or \
