@@ -1,8 +1,10 @@
 """Tool for cleaning up a BED file."""
 
-import argparse  # we use this module for option parsing. See main for details.
+import argparse
+from ast import Return  # we use this module for option parsing. See main for details.
 
 import sys
+from tkinter.messagebox import RETRY
 from typing import TextIO
 from bed import (
     parse_line, print_line, BedLine
@@ -31,7 +33,49 @@ def read_bed_file(f: TextIO) -> list[BedLine]:
 
 def merge(f1: list[BedLine], f2: list[BedLine], outfile: TextIO) -> None:
     """Merge features and write them to outfile."""
-    # FIXME: I have work to do here!
+    result = []
+    #list 1 = f1, list 2= f2 
+    #reminder BedLine = BedLine = NamedTuple("BedLine", [
+    #('chrom', str),
+    #('chrom_start', int),
+    #('chrom_end', int),
+    #('name', str)
+#])
+    result = [] 
+    #make empty list 
+    i, j = 0, 0 
+    #start both indexes at 0 
+    while i < len(f1) and j < len(f2):
+    #while neither list is empty
+        ft1 = f1[i]
+        #ft1 = Bedline 1 at index i 
+        ft2 = f2[j]
+        #ft1 = Bedline 2 at index j 
+        if ft1.chrom < ft2.chrom:
+        #Look at chrom first since lists are already sorted, 
+        #so can add whole list if chromosome is less 
+            print_line(ft1, outfile)
+            #use function print_Line from bed.py 
+            i += 1
+        elif ft2.chrom < ft1.chrom:
+            print_line(ft2, outfile)
+            j += 1
+        else:
+            if ft1.chrom_start < ft2.chrom_start:
+                print_line(ft1, outfile)
+                i += 1
+            else:
+                print_line(ft2, outfile)
+                j += 1
+    for line in f1[i:]:
+    #if list is empty 
+        print_line(line, outfile)
+    for line in f2[j:]:
+        print_line(line, outfile)
+    Return None
+
+
+
 
 
 def main() -> None:

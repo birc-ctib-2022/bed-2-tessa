@@ -11,7 +11,25 @@ from bed import (
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
     """Extract region chrom[start:end] and write it to outfile."""
-    return []  # FIXME: We want the actual region, not an empty list!
+    qres = []
+    #find  lb(a)
+    i= 0 
+    l = len (features)
+
+    while i < l: 
+        boundary = (i+l)//2 
+        if start <=  features [boundary] [1]: 
+            l= boundary 
+        else: 
+            i = boundary + 1 
+    if i >= l: 
+        return qres 
+    while features [i] [1] < end: 
+        qres.append(features[i])
+        i += 1 
+        if i == len(features): 
+            return [qres]
+    return [qres]  # FIXME: We want the actual region, not an empty list!
 
 
 def main() -> None:
