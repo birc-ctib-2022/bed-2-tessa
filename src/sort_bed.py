@@ -3,6 +3,7 @@
 import argparse  # we use this module for option parsing. See main for details.
 import sys
 from typing import TextIO
+from operator import attrgetter
 from bed import (
    BedLine, read_bed_file, print_line, Table
 )
@@ -17,8 +18,14 @@ def sort_file(table: Table) -> None:
         # You need to sort `features` with respect to chrom_start
         # and then update the table
         # FIXME: sort `features`
-        features.sort(key=lambda x: x[1])
-        table[chrom] = features  # features should be sorted here
+        table[chrom] = sort_chromosome(features)  # features should be sorted here
+
+def sort_chromosome (bed_lines: list[BedLine]) -> list[BedLine]:
+    """Sort a chromosome using buil in sort function"""
+    bed_lines.sort(key=attrgetter('chrom_start', 'chrom_end', 'name'))
+    return bed_lines
+
+ 
 
 
 def print_file(table: Table, outfile: TextIO) -> None:
