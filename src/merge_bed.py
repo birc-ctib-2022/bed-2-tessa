@@ -30,13 +30,13 @@ def read_bed_file(f: TextIO) -> list[BedLine]:
 
     return res
 
-def is_BEDline_before(el1:BedLine, el2:BedLine) -> bool:
+def is_BEDline_before (el1:BedLine, el2:BedLine) -> bool:
     """check if a BEDline is before another
-    >>>is_BEDline_before(BedLine("chr1",1,2, "foo"), BedLine("chr1",4,5,"bar")
+    >>> is_BEDline_before(BedLine("chr1", 1, 2, "foo"), BedLine("chr1", 5, 6, "foo"))
     True
     """
     for i in ['chrom', 'chrom_start', 'chrom_end']:
-        if getattr(el1,i) > (el2,i):
+        if getattr(el1,i) > getattr(el2,i):
             return False
     return True 
 

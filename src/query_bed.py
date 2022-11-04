@@ -17,6 +17,7 @@ def extract_region(features: list[BedLine],
             break
         index_stop +=1 
     return features [index_start:index_stop]
+
 def is_overlapping(interval_1: tuple[int,int], interval_2: tuple[int,int]) -> bool: 
     """check if overlapping
     >>> is_overlapping ((1,10), (2,5))
@@ -27,7 +28,7 @@ def is_overlapping(interval_1: tuple[int,int], interval_2: tuple[int,int]) -> bo
 
 def is_feature_in (feat: BedLine, start:int, end: int): 
     """check if bedline is in a given intercal 
-    >>>is_feature_in(BedLine("chr1", 0,3, "foo"), 0, 10) 
+    >>> is_feature_in(BedLine("chr1", 0,3, "foo"), 0, 10) 
     True
     """
     interval= (feat.chrom_start,feat.chrom_end)
