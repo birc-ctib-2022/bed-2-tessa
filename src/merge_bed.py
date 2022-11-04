@@ -72,7 +72,14 @@ def merge(f1: list[BedLine], f2: list[BedLine], outfile: TextIO) -> None:
         print_line(line, outfile)
     for line in f2[j:]:
         print_line(line, outfile)
-    Return None
+    return None 
+
+
+
+
+
+
+
 
 
 
