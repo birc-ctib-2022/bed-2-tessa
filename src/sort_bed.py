@@ -10,13 +10,15 @@ from bed import (
 
 
 def sort_file(table: Table) -> None:
+    #input of function should be a Table called table, 
+    #None is returned 
     """Sort each chromosome and update the table."""
     for chrom, features in table.items():
         # Here we iterate through all the chromosomes in the file.
         # You need to sort `features` with respect to chrom_start
-        # and then updatte the table
+        # and then update the table
         # FIXME: sort `features`
-        table[chrom] = features  # features should be sorted here
+        table[chrom] = sorted(features)  # features should be sorted here
 
 
 def print_file(table: Table, outfile: TextIO) -> None:
