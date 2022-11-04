@@ -59,8 +59,23 @@ Once you have implemented a lower bound search for the start of the range, imple
 *Answer the questions below and then push this file to GitHub.*
 
 *How do you use binary search to find the lower bound of a number? How did you have to modify the binary search algorithm?*
+The classical binary search is checking to see if a specidic number is in a list and is coded like: 
+low, high = 0, len(numbers)
+found = False
+while low < high:
+    mid = (low + high) // 2
+    if numbers[mid] == x:
+        found = True
+        break
+    elif numbers[mid] < x:
+        low = mid + 1
+    else:
+        high = mid
+I am not looking to see if a specific number is in a list, I am looking to see what index a specific number is at in my list, so I can remember that index site and use it to give me the region I am interested in. I had to modify the binary search by having the while loop not break when it finds the correct value like it does in classic binary search and return a boolean vale of true if it is there or false if it is not, but instead break when start >= end, ie when I can return start which will be the index number for where my integer that I am looking for can be found. 
 
 *Would anything be more difficult if the features covered ranges instead of single nucleotides (like real BED files)? What could go wrong, if anything?*
+If features covered ranges instead of single nucleotides,  my sort_chromosome function would still be able to sort it without more difficulty (I think). Right now, it sorts first on chromosome start, then by chromosome end then by name in that order of importance because I used key= attrgetter for my sort operator. I think right now, if this function were given ranges instead of single nucleotides, it would order them by their start index first, and then if two regions had the same start index, the range with the first end index would be sorted first, and then if they had the same start and end region, the range with the first name alphabetically would go first. 
 
 *We wrote a tool for merging two BED files, but what if we had a bunch of them? What would the complexity be if we merged them in, one at a time? What would the complexity be if we merged all of the files at the same time?*
 
+I we merged them in one at a time, the complexity would be O(n + m (Sum(len(other functions))) because we would have to through all of the functions every time we added a new one. If we merged them at the same time, I think the complexity would be O Σ(len(functions)) because I would only have to go through all of the functions once. 
