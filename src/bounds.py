@@ -11,12 +11,19 @@ def lower_bound(x: list[int], v: int) -> int:
 
     If all values in x are smaller than v, return len(x).
     """
-    return 0  # FIXME: Obviously the answer isn't always 0
+    while low < high:
+        mid = (low + high) // 2
+        if x[mid] < v:
+            low = mid + 1
+        else:
+            high = mid
 
+    return high
+ 
 
 def upper_bound(x: list[int], v: int) -> int:
     """Get the index of the upper bound of v in x.
 
     If all values in x are smaller than v, return len(x).
     """
-    return 0  # FIXME: Obviously the answer isn't always 0
+    return lower_bound(x, v + 1)
