@@ -5,6 +5,7 @@
 from filecmp import cmp
 import os
 
+
 cmd1 = 'echo "" > data/test-sorted-1.bed' #Command to create empty file
 cmd2 = 'python3.10 src/sort_bed.py data/input.bed data/test-sorted-1.bed' #A string with the command to generate our test output
 os.system(cmd1) #Calling our commands
@@ -14,3 +15,11 @@ def test_sort_bed_1():
     result = cmp('data/test-sorted-1.bed', 'data/input-sorted.bed', shallow = True) #Comparing test- and expected output.
     assert result
     
+cmd3 = 'echo "" > data/test-sorted-2.bed'
+cmd4 = 'python3.10 src/sort_bed.py data/large.bed data/test-sorted-2.bed'
+os.system(cmd3)
+os.system(cmd4)
+
+def test_sort_bed_2(): 
+    result = cmp('data/test-sorted-2.bed', 'data/large-sorted.bed', shallow=True)
+    assert result
