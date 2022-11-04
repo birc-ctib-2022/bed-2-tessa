@@ -1,7 +1,6 @@
 """Tool for cleaning up a BED file."""
 
 import argparse  # we use this module for option parsing. See main for details.
-from operator import attrgetter #attribute getter 
 import sys
 from typing import TextIO
 from bed import (
@@ -18,7 +17,7 @@ def sort_file(table: Table) -> None:
         # You need to sort `features` with respect to chrom_start
         # and then update the table
         # FIXME: sort `features`
-        features = sorted(features, key = attrgetter("chrom_start"))
+        features.sort(key=lambda x: x[1])
         table[chrom] = features  # features should be sorted here
 
 
