@@ -5,7 +5,7 @@ from ast import Return  # we use this module for option parsing. See main for de
 
 import sys
 from tkinter.messagebox import RETRY
-from typing import TextIO
+from typing import TextIO, Generator
 from bed import (
     parse_line, print_line, BedLine
 )
@@ -30,50 +30,32 @@ def read_bed_file(f: TextIO) -> list[BedLine]:
 
     return res
 
+def is_BEDline_before(el1:BedLine, el2:BedLine) -> bool:
+    """check if a BEDline is before another
+    >>>is_BEDline_before(BedLine("chr1",1,2, "foo"), BedLine("chr1",4,5,"bar")
+    True
+    """
+    for i in ['chrom', 'chrom_start', 'chrom_end']:
+        if getattr(el1,i) > (el2,i):
+            return False
+    return True 
 
-def merge(f1: list[BedLine], f2: list[BedLine], outfile: TextIO) -> None:
+def merge_sort_generator (list_1: list[BedLine], list_2: list[BedLine]) -> Generator [BedLine, None, None ]:
+    """merges 2 sorted lists and gives elements."""
+    iter1,iter2= iter(list_1), iter(list_2)
+    for (el1, el2) in zip(iter1,iter2): 
+        if is_BEDline_before (el1,el2):
+            yield el1
+        yield el2 
+    for el1 in iter1: 
+        yield el1 
+    for el2 in iter2: 
+        yield el2 
+
+def merge(list_1: list[BedLine], list_2: list[BedLine], outfile: TextIO) -> None:
     """Merge features and write them to outfile."""
-    result = []
-    #list 1 = f1, list 2= f2 
-    #reminder BedLine = BedLine = NamedTuple("BedLine", [
-    #('chrom', str),
-    #('chrom_start', int),
-    #('chrom_end', int),
-    #('name', str)
-#])
-    result = [] 
-    #make empty list 
-    i, j = 0, 0 
-    #start both indexes at 0 
-    while i < len(f1) and j < len(f2):
-    #while neither list is empty
-        ft1 = f1[i]
-        #ft1 = Bedline 1 at index i 
-        ft2 = f2[j]
-        #ft1 = Bedline 2 at index j 
-        if ft1.chrom < ft2.chrom:
-        #Look at chrom first since lists are already sorted, 
-        #so can add whole list if chromosome is less 
-            print_line(ft1, outfile)
-            #use function print_Line from bed.py 
-            i += 1
-        elif ft2.chrom < ft1.chrom:
-            print_line(ft2, outfile)
-            j += 1
-        else:
-            if ft1.chrom_start < ft2.chrom_start:
-                print_line(ft1, outfile)
-                i += 1
-            else:
-                print_line(ft2, outfile)
-                j += 1
-    for line in f1[i:]:
-    #if list is empty 
-        print_line(line, outfile)
-    for line in f2[j:]:
-        print_line(line, outfile)
-    return None 
-
+    for elem in merge_sort_generator (list_1, list_2): 
+        print_line(elem,outfile)
 
 
 

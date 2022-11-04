@@ -11,25 +11,41 @@ from bed import (
 def extract_region(features: list[BedLine],
                    start: int, end: int) -> list[BedLine]:
     """Extract region chrom[start:end] and write it to outfile."""
-    qres = []
-    #find  lb(a)
-    i= 0 
-    l = len (features)
+    index_start = index_stop = binary_search_region_start(features, start)
+    for i in range(index_start, len(features)):
+        if features[i].chrom_start >= end: 
+            break
+        index_stop +=1 
+    return features [index_start:index_stop]
+def is_overlapping(interval_1: tuple[int,int], interval_2: tuple[int,int]) -> bool: 
+    """check if overlapping
+    >>> is_overlapping ((1,10), (2,5))
+    True
+    """
+    return max (interval_1[0], interval_2 [0]) <min(interval_1[1], interval_2[1])
 
-    while i < l: 
-        boundary = (i+l)//2 
-        if start <=  features [boundary] [1]: 
-            l= boundary 
+
+def is_feature_in (feat: BedLine, start:int, end: int): 
+    """check if bedline is in a given intercal 
+    >>>is_feature_in(BedLine("chr1", 0,3, "foo"), 0, 10) 
+    True
+    """
+    interval= (feat.chrom_start,feat.chrom_end)
+    return is_overlapping(interval, (start,end))
+
+def binary_search_region_start (bed_lines: list[BedLine], start: int):
+    """
+    Find first index in BedLine list for which the chromosome start is equal 
+    or greater than a given number.
+    """
+    low, high = 0, len(bed_lines)
+    while low <high: 
+        mid = (high + low) //2 
+        if bed_lines [mid].chrom_start <start: 
+            low= mid+ 1 
         else: 
-            i = boundary + 1 
-    if i >= l: 
-        return qres 
-    while features [i] [1] < end: 
-        qres.append(features[i])
-        i += 1 
-        if i == len(features): 
-            return [qres]
-    return [qres]  # FIXME: We want the actual region, not an empty list!
+            high= mid 
+    return low 
 
 
 def main() -> None:
