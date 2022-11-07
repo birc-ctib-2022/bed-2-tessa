@@ -1,9 +1,11 @@
 """Tool for cleaning up a BED file."""
 
-import argparse  # we use this module for option parsing. See main for details.
+import argparse
+from ast import Return  # we use this module for option parsing. See main for details.
 
 import sys
-from typing import TextIO
+from tkinter.messagebox import RETRY
+from typing import TextIO, Generator
 from bed import (
     parse_line, print_line, BedLine
 )
@@ -29,9 +31,34 @@ def read_bed_file(f: TextIO) -> list[BedLine]:
     return res
 
 
-def merge(f1: list[BedLine], f2: list[BedLine], outfile: TextIO) -> None:
+
+def merge(list_1: list[BedLine], list_2: list[BedLine], outfile: TextIO) -> None:
     """Merge features and write them to outfile."""
-    # FIXME: I have work to do here!
+    result = []
+    i, j = 0, 0 
+    while i < len(list_1) and j < len(list_2):
+        f1 = list_1[i]
+        f2 = list_2[j]
+        if f1.chrom < f2.chrom:
+            print_line(f1, outfile)
+            i += 1
+        elif f2.chrom < f1.chrom:
+            print_line(f2, outfile)
+            j += 1
+        else:
+            if f1.chrom_start < f2.chrom_start:
+                print_line(f1, outfile)
+                i += 1
+            else:
+                print_line(f2, outfile)
+                j += 1
+    for line in list_1[i:]:
+        print_line(line, outfile)
+    for line in list_2[j:]:
+        print_line(line, outfile)
+
+
+
 
 
 def main() -> None:
