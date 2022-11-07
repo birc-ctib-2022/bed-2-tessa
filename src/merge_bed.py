@@ -40,28 +40,24 @@ def is_BEDline_before (el1:BedLine, el2:BedLine) -> bool:
             return False
     return True 
 
-def merge_sort_generator (list_1: list[BedLine], list_2: list[BedLine]) -> Generator [BedLine, None, None ]:
-    """merges 2 sorted lists and gives elements."""
-    iter1,iter2= iter(list_1), iter(list_2)
-    for (el1, el2) in zip(iter1,iter2): 
-        if is_BEDline_before (el1,el2):
-            yield el1
-        yield el2 
-    for el1 in iter1: 
-        yield el1 
-    for el2 in iter2: 
-        yield el2 
 
 def merge(list_1: list[BedLine], list_2: list[BedLine], outfile: TextIO) -> None:
     """Merge features and write them to outfile."""
-    for elem in merge_sort_generator (list_1, list_2): 
-        print_line(elem,outfile)
-
-
-
-
-
-
+    index1,index2= 0,0 
+    while index1 <= len(list_1): 
+        if index1 >= len(list_1):
+            for i in range(index2, len(list_2)):
+                print_line(list_2, outfile)
+        if index2 >= len(list_2):
+            for i in range(index1, len(list_1)): 
+                print_line(list_1, outfile)
+        if list_1[index1].chrom <= list_2[index2]:
+            if list_1[index1].chrom_start <= list_2[index2].chrom_start:
+                print_line(list_1[index1],outfile)
+                index1 += 1 
+                continue
+        print_line (list_2[index2],outfile)
+        index2 += 1 
 
 
 
