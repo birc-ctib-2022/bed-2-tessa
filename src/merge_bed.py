@@ -42,7 +42,7 @@ def merge(list_1: list[BedLine], list_2: list[BedLine], outfile: TextIO) -> None
         if index2 >= len(list_2):
             for i in range(index1, len(list_1)): 
                 print_line(list_1, outfile)
-        if list_1[index1].chrom <= list_2[index2]:
+        if list_1[index1].chrom <= list_2[index2].chrom:
             if list_1[index1].chrom_start <= list_2[index2].chrom_start:
                 print_line(list_1[index1],outfile)
                 index1 += 1 
